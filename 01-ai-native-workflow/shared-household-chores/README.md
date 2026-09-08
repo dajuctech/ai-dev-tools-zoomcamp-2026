@@ -30,6 +30,9 @@ I scoped that idea into a small Django application for coordinating chores in a 
 ```text
 shared-household-chores/
 ├── README.md
+├── _docs/
+│   └── plan.md
+├── backlog.md
 ├── manage.py
 ├── pyproject.toml
 ├── uv.lock

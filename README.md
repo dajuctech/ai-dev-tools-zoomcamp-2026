@@ -39,7 +39,7 @@ This module covers:
 └── shared-household-chores/
 ```
 
-Private study notes, raw course captures, PRDs, planning docs, backlog docs, and draft writing files are intentionally not tracked in Git. The public repository keeps the buildable project code and the README files needed to understand it.
+Private study notes, raw course captures, PRDs, and draft writing files are intentionally not tracked in Git. The public repository keeps the buildable project code, README files, and the homework planning artifacts needed to show the AI-native workflow.
 
 ## Homework Project: Shared Household Chores
 
@@ -74,6 +74,8 @@ Important files:
 ```text
 shared-household-chores/
 ├── README.md
+├── _docs/plan.md
+├── backlog.md
 ├── manage.py
 ├── pyproject.toml
 ├── uv.lock
@@ -175,6 +177,7 @@ System check identified no issues
 - RetroLoop includes `docker-compose.yml` for the Postgres constraint from the workshop PRD, but defaults to SQLite for simple local development and tests.
 - AI is used as part of the development workflow. The generated apps themselves do not call an AI API.
 - The generated `.venv/`, SQLite database files, caches, raw notes, PRDs, and private study documents are intentionally excluded from Git.
+- The homework `backlog.md` and `_docs/plan.md` are public because they show the required project planning workflow.
 
 ## Homework Submission Link
 
