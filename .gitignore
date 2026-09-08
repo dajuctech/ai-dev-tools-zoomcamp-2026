@@ -15,3 +15,4 @@ staticfiles/
 *.md
 !README.md
 !*/README.md
+!01-ai-native-workflow/shared-household-chores/backlog.md
