@@ -1,0 +1,26 @@
+{% extends "retrospectives/base.html" %}
+
+{% block content %}
+  <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+    <div>
+      <h1>{{ project.name }}</h1>
+      <p class="meta">Project page</p>
+    </div>
+    <a class="button" href="{% url 'cycle-create' project.pk %}">New feedback cycle</a>
+  </div>
+
+  <section class="panel">
+    <h2>Feedback Cycles</h2>
+    {% for cycle in cycles %}
+      <article class="card">
+        <h3><a href="{% url 'cycle-detail' cycle.pk %}">{{ cycle.title }}</a></h3>
+        <p class="meta">
+          {% if cycle.is_revealed %}Revealed{% else %}Collecting feedback{% endif %}
+          {% if cycle.voting_closed %} · Voting closed{% endif %}
+        </p>
+      </article>
+    {% empty %}
+      <p class="meta">No feedback cycles yet.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "chores/base.html" %}
+
+{% block content %}
+  <div class="grid">
+    <section class="panel primary">
+      <div class="actions" style="justify-content: space-between; margin-bottom: 8px;">
+        <h1>Pending Chores</h1>
+        <a class="button" href="{% url 'chore-create' %}">Add chore</a>
+      </div>
+
+      {% for chore in chores %}
+        <article class="chore">
+          <div>
+            <h2>{{ chore.title }}</h2>
+            {% if chore.description %}
+              <p>{{ chore.description }}</p>
+            {% endif %}
+            <p class="meta">
+              {% if chore.assignee %}Assigned to {{ chore.assignee }}{% else %}Unassigned{% endif %}
+              {% if chore.due_date %} · Due {{ chore.due_date }}{% endif %}
+            </p>
+          </div>
+          <div class="actions">
+            <a class="button secondary-button" href="{% url 'chore-edit' chore.pk %}">Edit</a>
+            <form class="inline" method="post" action="{% url 'chore-complete' chore.pk %}">
+              {% csrf_token %}
+              <button type="submit">Complete</button>
+            </form>
+          </div>
+        </article>
+      {% empty %}
+        <p class="meta">No pending chores.</p>
+      {% endfor %}
+    </section>
+
+    <aside class="panel secondary">
+      <h2>Household Members</h2>
+      {% if members %}
+        <ul>
+          {% for member in members %}
+            <li>{{ member.name }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="meta">No household members yet.</p>
+      {% endif %}
+
+      <form method="post" action="{% url 'member-create' %}">
+        {% csrf_token %}
+        {{ member_form.as_p }}
+        <button type="submit">Add member</button>
+      </form>
+    </aside>
+  </div>
+{% endblock %}

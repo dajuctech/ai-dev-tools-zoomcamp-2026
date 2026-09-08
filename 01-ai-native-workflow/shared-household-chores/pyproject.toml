@@ -1,0 +1,12 @@
+[project]
+name = "shared-household-chores"
+version = "0.1.0"
+description = "Django homework app for managing shared household chores"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<6.0",
+]
+
+[dependency-groups]
+dev = []

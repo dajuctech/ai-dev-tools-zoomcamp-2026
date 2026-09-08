@@ -1,0 +1,22 @@
+{% extends "retrospectives/base.html" %}
+
+{% block content %}
+  <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+    <h1>Projects</h1>
+    <a class="button" href="{% url 'project-create' %}">New project</a>
+  </div>
+
+  <section class="grid">
+    {% for project in projects %}
+      <article class="card">
+        <h2><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a></h2>
+        <p class="meta">Facilitated by {{ project.facilitator.first_name|default:project.facilitator.username }}</p>
+      </article>
+    {% empty %}
+      <article class="panel">
+        <p>No projects yet.</p>
+        <a class="button" href="{% url 'project-create' %}">Create your first project</a>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

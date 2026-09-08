@@ -1,0 +1,84 @@
+{% extends "retrospectives/base.html" %}
+
+{% block content %}
+  <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+    <div>
+      <h1>Retrospective Board</h1>
+      <p class="meta">{{ cycle.project.name }} · {{ cycle.title }}</p>
+    </div>
+    <div class="actions">
+      <a class="button secondary" href="{% url 'cycle-detail' cycle.pk %}">Cycle</a>
+      <a class="button secondary" href="{% url 'summary' cycle.pk %}">Summary</a>
+      <a class="button secondary" href="{% url 'transcript-upload' cycle.pk %}">Transcript</a>
+    </div>
+  </div>
+
+  <section class="panel" style="margin-bottom: 16px;">
+    {% if not cycle.is_revealed %}
+      <p>Feedback is still hidden from teammates.</p>
+      <form method="post" action="{% url 'reveal-feedback' cycle.pk %}">
+        {% csrf_token %}
+        <button type="submit">Reveal all feedback</button>
+      </form>
+    {% else %}
+      <p>Feedback is revealed. Votes left: {{ votes_left }}</p>
+      {% if not cycle.voting_closed %}
+        <form method="post" action="{% url 'close-voting' cycle.pk %}">
+          {% csrf_token %}
+          <button class="warning" type="submit">Close voting</button>
+        </form>
+      {% else %}
+        <p class="meta">Voting results are visible.</p>
+      {% endif %}
+    {% endif %}
+  </section>
+
+  {% if cycle.is_revealed %}
+    <section class="grid">
+      {% for row in cluster_rows %}
+        <article class="panel">
+          <form method="post" action="{% url 'cluster-rename' row.cluster.pk %}">
+            {% csrf_token %}
+            <input type="text" name="title" value="{{ row.cluster.title }}">
+            <button class="secondary" type="submit">Rename</button>
+          </form>
+          <p class="meta">Votes: {{ row.total }}</p>
+          {% if not cycle.voting_closed %}
+            <form method="post" action="{% url 'vote' row.cluster.pk %}">
+              {% csrf_token %}
+              <button type="submit">Vote</button>
+            </form>
+          {% endif %}
+
+          {% for item in row.cluster.feedback_items.all %}
+            <div class="card">
+              <span class="badge">{{ item.get_category_display }}</span>
+              <p>{{ item.body }}</p>
+              <p class="meta">By {{ item.visible_author }}</p>
+              <form method="post" action="{% url 'feedback-move' item.pk %}">
+                {% csrf_token %}
+                <select name="cluster">
+                  {% for cluster in clusters %}
+                    <option value="{{ cluster.pk }}" {% if cluster.pk == row.cluster.pk %}selected{% endif %}>{{ cluster.title }}</option>
+                  {% endfor %}
+                </select>
+                <button class="secondary" type="submit">Move</button>
+              </form>
+            </div>
+          {% empty %}
+            <p class="meta">No feedback in this cluster.</p>
+          {% endfor %}
+        </article>
+      {% endfor %}
+    </section>
+
+    <section class="panel" style="margin-top: 16px;">
+      <h2>Add Cluster</h2>
+      <form method="post" action="{% url 'cluster-create' cycle.pk %}">
+        {% csrf_token %}
+        {{ cluster_form.as_p }}
+        <button type="submit">Add cluster</button>
+      </form>
+    </section>
+  {% endif %}
+{% endblock %}

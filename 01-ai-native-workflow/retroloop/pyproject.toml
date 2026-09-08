@@ -1,0 +1,13 @@
+[project]
+name = "retroloop"
+version = "0.1.0"
+description = "Django retrospective app for weekly project feedback"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<6.0",
+    "psycopg[binary]>=3.2,<4.0",
+]
+
+[dependency-groups]
+dev = []

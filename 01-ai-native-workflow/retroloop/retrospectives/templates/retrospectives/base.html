@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RetroLoop</title>
+  <style>
+    :root {
+      --page: #f4f6f8;
+      --surface: #ffffff;
+      --ink: #172026;
+      --muted: #64717a;
+      --border: #d8dee4;
+      --accent: #0f766e;
+      --accent-dark: #115e59;
+      --warn: #b45309;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav,
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    nav {
+      min-height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    a {
+      color: var(--accent-dark);
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    main {
+      padding: 28px 0 48px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel,
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .card {
+      margin: 0 0 12px;
+    }
+
+    .actions,
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 4px 0 0;
+    }
+
+    label {
+      display: block;
+      font-weight: 650;
+      margin: 0 0 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font: inherit;
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    form p {
+      margin: 0 0 14px;
+    }
+
+    button,
+    .button {
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 650;
+    }
+
+    .button.secondary,
+    button.secondary {
+      background: transparent;
+      color: var(--accent-dark);
+    }
+
+    .button.warning,
+    button.warning {
+      background: var(--warn);
+      border-color: var(--warn);
+    }
+
+    .inline {
+      display: inline;
+    }
+
+    .messages {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px;
+    }
+
+    .messages li {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+
+    .badge {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 720px) {
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'project-list' %}">RetroLoop</a>
+      <div class="nav-actions">
+        {% if user.is_authenticated %}
+          <span class="meta">{{ user.first_name|default:user.username }}</span>
+          <form class="inline" method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="secondary" type="submit">Log out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Log in</a>
+          <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+  <main>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

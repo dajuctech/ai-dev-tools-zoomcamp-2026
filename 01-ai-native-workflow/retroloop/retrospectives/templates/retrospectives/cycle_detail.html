@@ -1,0 +1,34 @@
+{% extends "retrospectives/base.html" %}
+
+{% block content %}
+  <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+    <div>
+      <h1>{{ cycle.title }}</h1>
+      <p class="meta">{{ cycle.project.name }} · Current feedback cycle</p>
+    </div>
+    <div class="actions">
+      <a class="button" href="{% url 'feedback-create' cycle.pk %}">Submit feedback</a>
+      <a class="button secondary" href="{% url 'board' cycle.pk %}">Board</a>
+      <a class="button secondary" href="{% url 'summary' cycle.pk %}">Summary</a>
+    </div>
+  </div>
+
+  <section class="panel">
+    {% if cycle.is_revealed %}
+      <h2>Revealed Feedback</h2>
+    {% else %}
+      <h2>Your Submitted Feedback</h2>
+      <p class="meta">Other teammates' feedback stays hidden until reveal.</p>
+    {% endif %}
+
+    {% for item in feedback %}
+      <article class="card">
+        <span class="badge">{{ item.get_category_display }}</span>
+        <p>{{ item.body }}</p>
+        <p class="meta">By {{ item.visible_author }}</p>
+      </article>
+    {% empty %}
+      <p class="meta">No feedback visible here yet.</p>
+    {% endfor %}
+  </section>
+{% endblock %}
