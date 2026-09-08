@@ -9,3 +9,9 @@ db.sqlite3
 .env
 media/
 staticfiles/
+
+01-ai-native-workflow/homework.yaml
+
+*.md
+!README.md
+!*/README.md
